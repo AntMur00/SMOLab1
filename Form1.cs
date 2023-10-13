@@ -91,7 +91,7 @@ namespace SMOLab1
             b = 1;
             int k = 0;
 
-            while (/*!((b - a) < epsilon)*/k != 10)
+            while ((b - a) > epsilon)
             {
                 k++;
                 outputTB.Text += $"Iteration {k}:" + Environment.NewLine;
@@ -185,22 +185,23 @@ namespace SMOLab1
             b = 1;
             int n = 0;
             int k = 1;
-            int FibNMinOne, FibN;
+            int FibN;
+            List<int> FibonacciList = new List<int>();
 
-            do
+            float temp = (float)(b - a) / epsilon;
+            for (int i = 0; ; i++)
             {
-                n++;
-                FibNMinOne = Fibonacci(n - 1);
-                FibN = Fibonacci(n);
-                float temp = (float)(b - a) / epsilon;
-                if (FibNMinOne < temp && temp < FibN)
+                FibN = Fibonacci(i);
+                FibonacciList.Add(FibN);
+                if (temp < FibN)
+                {
+                    n = i;
                     break;
+                }
             }
-            while (true);
-
-            outputTB.Text += $"{n} {Fibonacci(n)}" + Environment.NewLine;
-            alpha = a + ((float)Fibonacci(n-2)/Fibonacci(n))*(b-a);
-            beta = a + ((float)Fibonacci(n-1)/Fibonacci(n+1))*(b-a);
+            outputTB.Text += $"{n} {FibonacciList[n - 1]}" + Environment.NewLine;
+            alpha = a + ((float)FibonacciList[n - 2] / FibonacciList[n - 1]) * (b - a);
+            beta = a + ((float)FibonacciList[n - 1] / FibonacciList[n]) * (b - a);
 
             outputTB.Text += $"alpha{k} = {alpha}" + Environment.NewLine;
             outputTB.Text += $"beta{k} = {beta}" + Environment.NewLine;
@@ -221,15 +222,15 @@ namespace SMOLab1
                         {
                             a = alpha;
                             alpha = beta;
-                            beta = a + ((float)Fibonacci(n - 1 - k) / Fibonacci(n + 1 - k)) * (b - a);
+                            beta = a + ((float)FibonacciList[n - k - 3] / FibonacciList[n - k - 1]) * (b - a);
                             break;
                         }
                     case false:
                         {
                             b = beta;
                             beta = alpha;
-                            alpha = a + ((float)Fibonacci(n - 2 - k) / Fibonacci(n - k)) * (b - a);
-                            break; 
+                            alpha = a + ((float)FibonacciList[n - k - 2] / FibonacciList[n - k - 1]) * (b - a);
+                            break;
                         }
                 }
                 outputTB.Text += $"[{a};{b}]" + Environment.NewLine;
@@ -239,7 +240,7 @@ namespace SMOLab1
             alpha = a;
             beta = alpha + delta;
 
-            switch (MainFunction(alpha) >= MainFunction(beta))
+            switch (MainFunction(alpha) > MainFunction(beta))
             {
                 case true:
                     {
