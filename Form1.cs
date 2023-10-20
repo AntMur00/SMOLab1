@@ -87,15 +87,21 @@ namespace SMOLab1
         #region Solving Methods
         private Task HalfDivision()
         {
+            if (!(delta < epsilon / 2))
+            {
+                MessageBox.Show("Не выполняется условие \"delta < epsilon/2\"");
+                return Task.CompletedTask; 
+            }
             a = 0;
             b = 1;
             int k = 0;
+            float temp1;
 
-            while ((b - a) > epsilon)
+            while (!((b - a) < epsilon))
             {
                 k++;
                 outputTB.Text += $"Iteration {k}:" + Environment.NewLine;
-                float temp1 = (float)(a + b) / 2;
+                temp1 = (float)(a + b) / 2;
 
                 alpha = temp1 - delta;
                 beta = temp1 + delta;
@@ -137,15 +143,7 @@ namespace SMOLab1
             outputTB.Text += $"[{a};{b}]" + Environment.NewLine;
             outputTB.Text += Environment.NewLine;
 
-            if ((b - a) < epsilon)
-            {
-                xStar = (a + b) / 2;
-                outputTB.Text += $"x* = {xStar}" + Environment.NewLine;
-                outputTB.Text += Environment.NewLine;
-                return Task.CompletedTask;
-            }
-
-            while (/*!(b - a) <= epsilon)*/k != 10)
+            while (!((b - a) < epsilon))
             {
                 k++;
                 outputTB.Text += $"Iteration {k}:" + Environment.NewLine;
@@ -278,7 +276,7 @@ namespace SMOLab1
             outputTB.Text += $"[{a};{b}]" + Environment.NewLine;
             outputTB.Text += Environment.NewLine;
 
-            while (Math.Abs(x - xPrev) < epsilon)
+            while (!(Math.Abs(x - xPrev) < epsilon))
             {
                 k++;
                 outputTB.Text += $"Iteration {k}:" + Environment.NewLine;
